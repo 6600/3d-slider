@@ -1,6 +1,5 @@
 <template>
   <div class="show">
-    <div class="title">{{data.name}}</div>
     <table v-if="tableData" border="0">
       <tr v-for="(item, ind) in tableData" :key="ind">
         <td v-for="(data, index) in item" :key="index" :rowspan="data.rowspan" :colspan="data.colspan">{{data.value}}</td>
@@ -176,24 +175,24 @@ export default {
     overflow: hidden;
     background-color: #f8f8f8;
   }
-  .title {
-    height: 20px;
-    line-height: 20px;
-    color: white;
-    background-color: deepskyblue;
-  }
   table {
     width: 100%;
     font-size: 12px;
-    height: calc(100% - 20px);
+    border-spacing: 0px;
+    height: 100%;
+  }
+  table tr:nth-child(2) {
+    height: 30px;
+    background-color: aqua;
+    color: darkmagenta;
+    font-size: 14px;
+  }
+  table tr:nth-child(3) td{
+    text-align: left;
   }
   table td {
     text-align: center;
-  }
-  table tr:nth-child(even) {
-    background: rgb(238, 211, 210)
-  }
-  table tr:nth-child(odd) {
-    background: #FFF
+    border-bottom: 1px solid #ccc;
+    border-right: 1px solid #ccc;
   }
 </style>

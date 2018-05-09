@@ -1,15 +1,15 @@
 <template>
   <section id="slideshow">
     <div class="entire-content">
-      <div v-if="tableData" class="content-carrousel" :class="{rotate: enlargeItem === 0}">
-        <figure class="shadow" @click="enlarge(1)" :class="{enlarge: enlargeItem === 1}">
-          <Excl :data="tableData"></Excl>
+      <div class="content-carrousel" :style="{transform: 'rotateY(' + angle + 'deg)'}" :class="{plane: enlargeItem !== 0}" @touchmove="turn" @touchend="startX = null">
+        <figure class="shadow" @click="enlarge(1)" :class="{enlarge: enlargeItem === 1}" @mouseover="isPaused = true" @mouseout="isPaused = false">
+          <Excl v-if="tableData" :data="tableData"></Excl>
         </figure>
-        <figure class="shadow" @click="enlarge(2)" :class="{enlarge: enlargeItem === 2}">
-          <Excl :data="tableData2"></Excl>
+        <figure class="shadow" @click="enlarge(2)" :class="{enlarge: enlargeItem === 2}" @mouseover="isPaused = true" @mouseout="isPaused = false">
+          <Excl v-if="tableData2" :data="tableData2"></Excl>
         </figure>
-        <figure class="shadow" @click="enlarge(3)" :class="{enlarge: enlargeItem === 3}">
-          <Excl :data="tableData3"></Excl>
+        <figure class="shadow" @click="enlarge(3)" :class="{enlarge: enlargeItem === 3}" @mouseover="isPaused = true" @mouseout="isPaused = false">
+          <Excl v-if="tableData3" :data="tableData3"></Excl>
         </figure>
       </div>
     </div>
@@ -18,11 +18,14 @@
 </template>
 
 <script>
+let startX = null
 import Excl from './components/Excl.vue'
 export default {
   name: 'app',
   data () {
     return {
+      angle: 0,
+      clock: null,
       isPaused: false,
       enlargeItem: 0,
       tableData: null,
@@ -83,7 +86,23 @@ export default {
           throw new Error("Unable to copy obj! Its type isn't supported.")
         }
       }
-    }
+    },
+    animate () {
+      if (!this.isPaused) {
+        if (this.angle > 360) this.angle = 0
+        this.angle += 0.1
+      }
+      requestAnimationFrame(this.animate)
+    },
+    turn (e) {
+      const touchX = event.targetTouches[0].pageX
+      if (startX !== null) {
+        const change = startX - touchX
+        console.log(change)
+        this.angle -= change / 5
+      }
+      startX = touchX
+    },
   },
   created () {
     const sendData = {
@@ -100,19 +119,71 @@ export default {
       cache: 'default',
       body: JSON.stringify(sendData)
     }
-    fetch('http://192.168.1.105/index/index/select_data/', fetchConfig).then((res) => {
+    fetch('http://openvticn.com/excel/public/index.php?s=index/index/select_data', fetchConfig).then((res) => {
       if (res.ok) { // 请求成功执行回掉
         res.json().then((data) => {
           data.data = data.data.replace(/NULL/g, '')
           data.data = JSON.parse(data.data)
           this.tableData = this.deepClone(data)
+        })
+      }
+    }, (e) => {
+      console.error('[POST]请求失败！', e)
+    })
+    const sendData2 = {
+      type: 'id',
+      data: '8'
+    }
+    // 发起post请求
+    const fetchConfig2 = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      },
+      credentials: 'credentials',
+      cache: 'default',
+      body: JSON.stringify(sendData2)
+    }
+    fetch('http://openvticn.com/excel/public/index.php?s=index/index/select_data', fetchConfig2).then((res) => {
+      if (res.ok) { // 请求成功执行回掉
+        res.json().then((data) => {
+          data.data = data.data.replace(/NULL/g, '')
+          data.data = JSON.parse(data.data)
           this.tableData2 = this.deepClone(data)
+        })
+      }
+    }, (e) => {
+      console.error('[POST]请求失败！', e)
+    })
+    const sendData3 = {
+      type: 'id',
+      data: '9'
+    }
+    // 发起post请求
+    const fetchConfig3 = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      },
+      credentials: 'credentials',
+      cache: 'default',
+      body: JSON.stringify(sendData3)
+    }
+    fetch('http://openvticn.com/excel/public/index.php?s=index/index/select_data', fetchConfig3).then((res) => {
+      if (res.ok) { // 请求成功执行回掉
+        res.json().then((data) => {
+          data.data = data.data.replace(/NULL/g, '')
+          data.data = JSON.parse(data.data)
           this.tableData3 = this.deepClone(data)
         })
       }
     }, (e) => {
       console.error('[POST]请求失败！', e)
     })
+  },
+  mounted () {
+    // 自动旋转
+    this.animate()
   }
 }
 </script>
@@ -170,6 +241,7 @@ export default {
     margin: auto;
     width: 100%;
     height: 100%;
+    overflow: hidden;
     perspective: 1000px;
     position: relative;
   }
@@ -179,11 +251,11 @@ export default {
     height: 100%;
     position: absolute;
     float: right;
-  }
-  .rotate {
-    /* 调节动画快慢 */
-    animation: rotar 60s infinite linear;
     transform-style: preserve-3d;
+  }
+  .plane {
+    transform-style: unset;
+    transform: none !important;
   }
 
   .entire-content .content-carrousel .enlarge {
@@ -197,10 +269,13 @@ export default {
     height: 40px;
     line-height: 40px;
   }
-  .content-carrousel:hover {
-    animation-play-state: paused;
+  .content-carrousel .enlarge table {
+    height: unset;
   }
-
+  .content-carrousel .enlarge td {
+    height: 20px;
+    font-size: 14px;
+  }
   .content-carrousel figure {
     width: 600px;
     height: 410px;
