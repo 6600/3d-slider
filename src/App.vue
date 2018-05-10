@@ -6,11 +6,14 @@
           <Excl v-if="tableData" :data="item"></Excl>
         </figure>
       </div>
+      <div class="file-panel">
+        <div class="file-name" v-for="item in tableData" :key="item.id">{{item.name}}</div>
+      </div>
+      <div class="close" v-show="enlargeItem !== 0" @click="enlargeItem = 0">x</div>
+      <div class="update" @click="refash">
+        <svg t="1525943602085" class="icon" style="" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4708" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24"><defs></defs><path d="M962.074 490.554L647.271 355.638l125.831-89.881c-65.56-69.108-157.968-112.493-260.747-112.493-174.244 0-319.503 123.884-352.634 288.369l-83.949-34.777C123.56 209.825 300.628 63.32 512.355 63.32c132.973 0 252.063 58.09 334.393 149.833l115.326-82.375v359.776z m-710.47 269.773c65.556 69.108 157.973 112.488 260.752 112.488 174.918 0 320.546-124.873 352.931-290.307l83.868 35.874c-47.481 197.458-224.77 344.377-436.799 344.377-132.973 0-252.068-58.086-334.398-149.828l-115.322 82.37V535.525L377.44 670.441l-125.836 89.886z" p-id="4709"></path></svg>
+      </div>
     </div>
-    <div class="file-panel">
-      <div class="file-name" v-for="item in tableData" :key="item.id">{{item.name}}</div>
-    </div>
-    <div class="close" v-show="enlargeItem !== 0" @click="enlargeItem = 0">x</div>
   </section>
 </template>
 
@@ -104,6 +107,17 @@ export default {
     },
     clearX () {
       startX = null
+    },
+    refash () {
+      fetch('http://192.168.1.114/www2/public/index.php?s=index/index/filedir').then((res) => {
+        if (res.ok) { // 请求成功执行回掉
+          res.json().then((data) => {
+            console.log(data)
+          })
+        }
+      }, (e) => {
+        console.error('[POST]请求失败！', e)
+      })
     }
   },
   created () {
@@ -215,7 +229,7 @@ export default {
     width: 100%;
     height: 100%;
     transform: none;
-    z-index: 999;
+    z-index: 99;
   }
   .content-carrousel .enlarge .title {
     height: 40px;
@@ -255,12 +269,13 @@ export default {
     position: fixed;
     right: 0;
     top: 0;
-    height: 40px;
-    width: 40px;
+    z-index: 100;
+    height: 29px;
+    width: 29px;
     cursor: pointer;
-    background-color: khaki;
+    background-color: burlywood;
     text-align: center;
-    line-height: 40px;
+    line-height: 29px;
     font-size: 2rem;
   }
   .file-panel {
@@ -276,6 +291,17 @@ export default {
     padding: 0 5px;
     height: 25px;
     line-height: 25px;
+  }
+  .update {
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+  }
+  .update svg {
+    fill: cadetblue;
+  }
+  .update svg:hover {
+    fill: antiquewhite;
   }
   @keyframes rotar {
     from {
