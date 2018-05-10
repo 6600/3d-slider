@@ -1,17 +1,14 @@
 <template>
   <section id="slideshow">
     <div class="entire-content">
-      <div class="content-carrousel" :style="{transform: 'rotateY(' + angle + 'deg)'}" :class="{plane: enlargeItem !== 0}" @touchmove="turn" @touchend="startX = null">
-        <figure class="shadow" @click="enlarge(1)" :class="{enlarge: enlargeItem === 1}" @mouseover="isPaused = true" @mouseout="isPaused = false">
-          <Excl v-if="tableData" :data="tableData"></Excl>
-        </figure>
-        <figure class="shadow" @click="enlarge(2)" :class="{enlarge: enlargeItem === 2}" @mouseover="isPaused = true" @mouseout="isPaused = false">
-          <Excl v-if="tableData2" :data="tableData2"></Excl>
-        </figure>
-        <figure class="shadow" @click="enlarge(3)" :class="{enlarge: enlargeItem === 3}" @mouseover="isPaused = true" @mouseout="isPaused = false">
-          <Excl v-if="tableData3" :data="tableData3"></Excl>
+      <div class="content-carrousel" :class="{plane: enlargeItem !== 0}" @touchmove="turn" @touchend="clearX">
+        <figure v-for="(item, ind) in tableData" class="shadow" @click="enlarge(1)" :style="{transform: 'rotateY(' + (rotation + config.angle * ind) + 'deg) translateZ(300px)'}" :class="{enlarge: enlargeItem === 1}" @mouseover="isPaused = true" @mouseout="isPaused = false" :key="ind">
+          <Excl v-if="tableData" :data="item"></Excl>
         </figure>
       </div>
+    </div>
+    <div class="file-panel">
+      <div class="file-name" v-for="item in tableData" :key="item.id">{{item.name}}</div>
     </div>
     <div class="close" v-show="enlargeItem !== 0" @click="enlargeItem = 0">x</div>
   </section>
@@ -24,13 +21,16 @@ export default {
   name: 'app',
   data () {
     return {
-      angle: 0,
+      rotation: 0,
       clock: null,
       isPaused: false,
       enlargeItem: 0,
-      tableData: null,
-      tableData2: null,
-      tableData3: null
+      config: {
+        angle: 90,
+        speed: 1,
+        requestList: ['泰州能效对标日对标(1日).xls', '泰州能效对标日对标(2日).xls', '泰州能效对标日对标(3日).xls', '泰州能效对标日对标(4日).xls']
+      },
+      tableData: null
     }
   },
   components: {
@@ -88,9 +88,9 @@ export default {
       }
     },
     animate () {
-      if (!this.isPaused) {
-        if (this.angle > 360) this.angle = 0
-        this.angle += 0.1
+      if (!this.isPaused  && this.enlargeItem === 0) {
+        if (this.rotation > 360) this.rotation = 0
+        this.rotation += this.config.speed / 10
       }
       requestAnimationFrame(this.animate)
     },
@@ -98,16 +98,18 @@ export default {
       const touchX = event.targetTouches[0].pageX
       if (startX !== null) {
         const change = startX - touchX
-        console.log(change)
-        this.angle -= change / 5
+        this.rotation -= change / 5
       }
       startX = touchX
     },
+    clearX () {
+      startX = null
+    }
   },
   created () {
     const sendData = {
-      type: 'id',
-      data: '5'
+      type: 'name',
+      data: this.config.requestList.toString()
     }
     // 发起post请求
     const fetchConfig = {
@@ -119,62 +121,11 @@ export default {
       cache: 'default',
       body: JSON.stringify(sendData)
     }
-    fetch('http://openvticn.com/excel/public/index.php?s=index/index/select_data', fetchConfig).then((res) => {
+    fetch('http://192.168.1.114/www2/public/index.php?s=index/index/select_data', fetchConfig).then((res) => {
       if (res.ok) { // 请求成功执行回掉
         res.json().then((data) => {
-          data.data = data.data.replace(/NULL/g, '')
-          data.data = JSON.parse(data.data)
+          // data.data = JSON.parse(data.data)
           this.tableData = this.deepClone(data)
-        })
-      }
-    }, (e) => {
-      console.error('[POST]请求失败！', e)
-    })
-    const sendData2 = {
-      type: 'id',
-      data: '8'
-    }
-    // 发起post请求
-    const fetchConfig2 = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-      },
-      credentials: 'credentials',
-      cache: 'default',
-      body: JSON.stringify(sendData2)
-    }
-    fetch('http://openvticn.com/excel/public/index.php?s=index/index/select_data', fetchConfig2).then((res) => {
-      if (res.ok) { // 请求成功执行回掉
-        res.json().then((data) => {
-          data.data = data.data.replace(/NULL/g, '')
-          data.data = JSON.parse(data.data)
-          this.tableData2 = this.deepClone(data)
-        })
-      }
-    }, (e) => {
-      console.error('[POST]请求失败！', e)
-    })
-    const sendData3 = {
-      type: 'id',
-      data: '9'
-    }
-    // 发起post请求
-    const fetchConfig3 = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-      },
-      credentials: 'credentials',
-      cache: 'default',
-      body: JSON.stringify(sendData3)
-    }
-    fetch('http://openvticn.com/excel/public/index.php?s=index/index/select_data', fetchConfig3).then((res) => {
-      if (res.ok) { // 请求成功执行回掉
-        res.json().then((data) => {
-          data.data = data.data.replace(/NULL/g, '')
-          data.data = JSON.parse(data.data)
-          this.tableData3 = this.deepClone(data)
         })
       }
     }, (e) => {
@@ -209,7 +160,7 @@ export default {
     height: 350px;
     width: 100%;
     height: 100%;
-    background-color: #6adecd;
+    background-color: #35373e;
     box-sizing: border-box;
   }
 
@@ -250,11 +201,12 @@ export default {
     width: 100%;
     height: 100%;
     position: absolute;
-    float: right;
     transform-style: preserve-3d;
   }
   .plane {
     transform-style: unset;
+  }
+  .plane figure {
     transform: none !important;
   }
 
@@ -277,10 +229,9 @@ export default {
     font-size: 14px;
   }
   .content-carrousel figure {
-    width: 600px;
-    height: 410px;
+    width: 540px;
+    height: 380px;
     z-index: 1;
-    transition: all 500ms;
     border: 1px solid #3b444b;
     overflow: hidden;
     position: absolute;
@@ -311,6 +262,20 @@ export default {
     text-align: center;
     line-height: 40px;
     font-size: 2rem;
+  }
+  .file-panel {
+    position: fixed;
+    top: 5px;
+    right: 5px;
+    width: 220px;
+    background-color: #454c5a;
+    opacity: 0.8;
+  }
+  .file-panel .file-name {
+    color: white;
+    padding: 0 5px;
+    height: 25px;
+    line-height: 25px;
   }
   @keyframes rotar {
     from {

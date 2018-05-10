@@ -2,7 +2,7 @@
   <div class="show">
     <table v-if="tableData" border="0">
       <tr v-for="(item, ind) in tableData" :key="ind">
-        <td v-for="(data, index) in item" :key="index" :rowspan="data.rowspan" :colspan="data.colspan">{{data.value}}</td>
+        <td v-for="(data, index) in item" v-if="data.value !== 'NULL'" :key="index" :rowspan="data.rowspan" :colspan="data.colspan">{{data.value}}</td>
       </tr>
     </table>
   </div>
@@ -21,7 +21,7 @@ export default {
   },
   created () {
     // 将数据转换格式
-    let dataCopy = this.deepClone(this.data.data)
+    let dataCopy = JSON.parse(this.data.data)
     let format = JSON.parse(this.data.format)
     let newData = []
     // console.log(dataCopy)
@@ -183,12 +183,13 @@ export default {
   }
   table tr:nth-child(2) {
     height: 30px;
-    background-color: aqua;
-    color: darkmagenta;
+    background-color: #4d5564;
+    color: white;
     font-size: 14px;
   }
   table tr:nth-child(3) td{
     text-align: left;
+    background-color: beige;
   }
   table td {
     text-align: center;
