@@ -2,7 +2,7 @@
   <div class="show shadow">
     <table v-if="tableData" border="0">
       <tr v-for="(item, ind) in tableData" :key="ind">
-        <td v-for="(data, index) in item" v-if="data.value !== 'NULL'" :key="index" :rowspan="data.rowspan" :colspan="data.colspan">{{data.value}}</td>
+        <td v-for="(data, index) in item" v-if="data.value !== 'NULL'" :key="index" :rowspan="data.rowspan" :colspan="data.colspan">{{fixed(data.value)}}</td>
       </tr>
     </table>
   </div>
@@ -73,7 +73,7 @@ export default {
           delete dataCopy[startColumn - 1][element]
         })
       } else {
-        console.log(dataCopy[startColumn - 1][startRow].rowspan)
+        // console.log(dataCopy[startColumn - 1][startRow].rowspan)
         dataCopy[startColumn - 1][startRow].rowspan = parseInt(endColumn) - parseInt(startColumn) + 1
         for (let i = parseInt(startColumn); i < parseInt(endColumn); i++) {
           delete dataCopy[i][startRow]
@@ -81,7 +81,7 @@ export default {
       }
     }
     this.tableData = dataCopy
-    console.log(this.tableData)
+    // console.log(this.tableData)
   },
   methods: {
     // 深拷贝
@@ -162,6 +162,10 @@ export default {
         Z: 25
       }
       return list.slice(obj[start.toUpperCase()] + startNum, obj[end.toUpperCase()] + startNum)
+    },
+    fixed (text) {
+      if (typeof(text) === 'number') return text.toFixed(2)
+      else return text
     }
   }
 }

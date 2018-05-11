@@ -7,7 +7,7 @@
         </figure>
       </div>
       <div class="file-panel">
-        <div class="file-name" v-for="item in tableData" :key="item.id">{{item.name}}</div>
+        <div class="file-name" v-for="(item, ind) in tableData" @click="enlarge(ind + 1)" :key="item.id">{{item.name}}</div>
       </div>
       <div class="close" v-show="enlargeItem !== 0" @click="enlargeItem = 0">x</div>
       <div class="update" @click="refash">
@@ -125,7 +125,7 @@ export default {
       startX = null
     },
     refash () {
-      fetch('http://192.168.1.114/www2/public/index.php?s=index/index/filedir').then((res) => {
+      fetch('http://openvticn.com/excel/public/index.php?s=index/index/filedir').then((res) => {
         if (res.ok) { // 请求成功执行回掉
           res.json().then((data) => {
             console.log(data)
@@ -151,7 +151,7 @@ export default {
       cache: 'default',
       body: JSON.stringify(sendData)
     }
-    fetch('http://192.168.1.114/www2/public/index.php?s=index/index/select_data', fetchConfig).then((res) => {
+    fetch('http://openvticn.com/excel/public/index.php?s=index/index/select_data', fetchConfig).then((res) => {
       if (res.ok) { // 请求成功执行回掉
         res.json().then((data) => {
           // data.data = JSON.parse(data.data)
@@ -306,6 +306,10 @@ export default {
     padding: 0 5px;
     height: 25px;
     line-height: 25px;
+  }
+  .file-panel .file-name:hover {
+    color: black;
+    background-color: darkkhaki;
   }
   .update {
     position: fixed;
