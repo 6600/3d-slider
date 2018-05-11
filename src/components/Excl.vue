@@ -1,5 +1,5 @@
 <template>
-  <div class="show">
+  <div class="show shadow">
     <table v-if="tableData" border="0">
       <tr v-for="(item, ind) in tableData" :key="ind">
         <td v-for="(data, index) in item" v-if="data.value !== 'NULL'" :key="index" :rowspan="data.rowspan" :colspan="data.colspan">{{data.value}}</td>
@@ -173,7 +173,12 @@ export default {
     height: 100%;
     width: 100%;
     overflow: hidden;
+    cursor: pointer;
+    border: 1px solid #3b444b;
     background-color: #f8f8f8;
+    transform: scale(0.5,0.5);
+    box-shadow: 0px 0px 20px 0px #000;
+    border-radius: 1px;
   }
   table {
     width: 100%;

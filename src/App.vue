@@ -2,8 +2,8 @@
   <section id="slideshow">
     <div class="entire-content">
       <div class="content-carrousel" :class="{plane: enlargeItem !== 0}" @touchmove="turn" @touchend="clearX">
-        <figure v-for="(item, ind) in tableData" class="shadow" @click="enlarge(1)" :style="{transform: 'rotateY(' + (rotation + config.angle * ind) + 'deg) translateZ(300px)'}" :class="{enlarge: enlargeItem === 1}" @mouseover="isPaused = true" @mouseout="isPaused = false" :key="ind">
-          <Excl v-if="tableData" :data="item"></Excl>
+        <figure v-for="(item, ind) in tableData" class="shadow" @click="enlarge(ind + 1)" :style="{transform: 'rotateY(' + (rotation + config.angle * ind) + 'deg) translateZ(' + config.translateZ +'px)'}" :class="{enlarge: enlargeItem === ind + 1}" :key="ind">
+          <Excl v-if="tableData" :data="item" @mouseover="isPaused = true" @mouseout="isPaused = false"></Excl>
         </figure>
       </div>
       <div class="file-panel">
@@ -29,9 +29,25 @@ export default {
       isPaused: false,
       enlargeItem: 0,
       config: {
-        angle: 90,
+        angle: 30,
+        translateZ: 560,
         speed: 1,
-        requestList: ['泰州能效对标日对标(1日).xls', '泰州能效对标日对标(2日).xls', '泰州能效对标日对标(3日).xls', '泰州能效对标日对标(4日).xls']
+        requestList: [
+          '国电泰州#3至#4机组对比报表(1月).xlsx',
+          '国电泰州#3至#4机组对比报表(2月).xlsx',
+          '国电泰州#3至#4机组对比报表(3月).xlsx',
+          '国电泰州#3至#4机组对比报表(4月).xlsx',
+          '国电泰州机组对标环比月报表.xlsx',
+          '国电泰州机组对标同比月报表.xlsx',
+          '国电泰州机组对标月报表(1月).xlsx',
+          '国电泰州机组对标月报表(2月).xlsx',
+          '国电泰州机组对标月报表(3月).xlsx',
+          '国电泰州机组对标月报表(4月).xlsx',
+          '泰州能效对标日对标(1日).xls',
+          '泰州能效对标日对标(2日).xls',
+          '泰州能效对标日对标(3日).xls',
+          '泰州能效对标日对标(4日).xls'
+        ]
       },
       tableData: null
     }
@@ -242,11 +258,14 @@ export default {
     height: 20px;
     font-size: 14px;
   }
+  .content-carrousel .enlarge .show {
+    transform: none;
+  }
   .content-carrousel figure {
+    transform: scale(2,2);
     width: 540px;
     height: 380px;
     z-index: 1;
-    border: 1px solid #3b444b;
     overflow: hidden;
     position: absolute;
   }
@@ -255,10 +274,7 @@ export default {
   .content-carrousel figure:nth-child(2) { transform: rotateY(120deg) translateZ(300px); }
   .content-carrousel figure:nth-child(3) { transform: rotateY(240deg) translateZ(300px); }
   .shadow {
-    cursor: pointer;
     position: absolute;
-    box-shadow: 0px 0px 20px 0px #000;
-    border-radius: 1px;
     left: 0;
     right: 0;
     top: 0;
@@ -282,7 +298,6 @@ export default {
     position: fixed;
     top: 5px;
     right: 5px;
-    width: 220px;
     background-color: #454c5a;
     opacity: 0.8;
   }
