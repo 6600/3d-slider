@@ -164,7 +164,9 @@ export default {
       return list.slice(obj[start.toUpperCase()] + startNum, obj[end.toUpperCase()] + startNum)
     },
     fixed (text) {
-      if (typeof(text) === 'number') return text.toFixed(2)
+      if (typeof(text) === 'number' && text.toString().length > 6) {
+        return text.toFixed(2)
+      }
       else return text
     }
   }
