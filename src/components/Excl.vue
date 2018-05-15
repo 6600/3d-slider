@@ -131,6 +131,7 @@ export default {
         }
       }
     },
+    // 去字母排序中间
     betwon (start, end, startNum = 0, endNum = 0) {
       const list = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', ' U', ' V', ' W', ' X', ' Y', 'Z']
       const obj = {
@@ -163,6 +164,7 @@ export default {
       }
       return list.slice(obj[start.toUpperCase()] + startNum, obj[end.toUpperCase()] + startNum)
     },
+    // 保留两位小数
     fixed (text) {
       if (typeof(text) === 'number' && text.toString().length > 6) {
         return text.toFixed(2)
@@ -182,7 +184,7 @@ export default {
     cursor: pointer;
     border: 1px solid #3b444b;
     background-color: #f8f8f8;
-    transform: scale(0.5,0.5);
+    transform: scale(0.6, 0.6);
     box-shadow: 0px 0px 20px 0px #000;
     border-radius: 1px;
   }

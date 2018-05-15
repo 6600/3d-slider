@@ -24,13 +24,13 @@ export default {
   name: 'app',
   data () {
     return {
-      rotation: 0,
+      rotation: 360,
       clock: null,
       isPaused: false,
       enlargeItem: 0,
       config: {
         angle: 30,
-        translateZ: 560,
+        translateZ: 650,
         speed: 1,
         requestList: [
           '国电泰州#3至#4机组对比报表(1月).xlsx',
@@ -109,7 +109,8 @@ export default {
     animate () {
       if (!this.isPaused  && this.enlargeItem === 0) {
         if (this.rotation > 360) this.rotation = 0
-        this.rotation += this.config.speed / 10
+        if (this.rotation < 0) this.rotation = 360
+        this.rotation -= this.config.speed / 10
       }
       requestAnimationFrame(this.animate)
     },
@@ -125,13 +126,14 @@ export default {
       startX = null
     },
     refash () {
-      fetch('http://openvticn.com/excel/public/index.php?s=index/index/filedir').then((res) => {
+      fetch('http://172.103.1.221:8081/index/index/filedir').then((res) => {
         if (res.ok) { // 请求成功执行回掉
           res.json().then((data) => {
             console.log(data)
           })
         }
       }, (e) => {
+        alert('刷新失败!')
         console.error('[POST]请求失败！', e)
       })
     }
@@ -151,7 +153,7 @@ export default {
       cache: 'default',
       body: JSON.stringify(sendData)
     }
-    fetch('http://openvticn.com/excel/public/index.php?s=index/index/select_data', fetchConfig).then((res) => {
+    fetch('http://172.103.1.221:8081/index/index/select_data', fetchConfig).then((res) => {
       if (res.ok) { // 请求成功执行回掉
         res.json().then((data) => {
           // data.data = JSON.parse(data.data)
@@ -159,6 +161,7 @@ export default {
         })
       }
     }, (e) => {
+      alert('从服务器获取数据失败!')
       console.error('[POST]请求失败！', e)
     })
   },
@@ -305,6 +308,7 @@ export default {
     color: white;
     padding: 0 5px;
     height: 25px;
+    cursor: pointer;
     line-height: 25px;
   }
   .file-panel .file-name:hover {
