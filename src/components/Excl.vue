@@ -194,19 +194,30 @@ export default {
     border-spacing: 0px;
     height: 100%;
   }
+  table tr td {
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+  }
+  table tr:nth-child(1) {
+    display: none;
+  }
+  table tr:nth-child(2) td {
+    border-bottom: none;
+  }
   table tr:nth-child(2) {
     height: 30px;
-    background-color: #4d5564;
-    color: white;
+    font-weight: bold;
+    background-color: #212121;
+    color: #64a9b4;
     font-size: 14px;
   }
-  table tr:nth-child(3) td{
+  table tr:nth-child(3) td {
+    color: white;
+    padding: 0 5px;
     text-align: left;
-    background-color: beige;
+    background-color: #212121;
   }
   table td {
     text-align: center;
-    border-bottom: 1px solid #ccc;
-    border-right: 1px solid #ccc;
   }
 </style>
