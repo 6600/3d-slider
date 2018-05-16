@@ -1,9 +1,11 @@
 <template>
   <section id="slideshow">
     <div class="entire-content">
-      <div class="content-carrousel" :class="{plane: enlargeItem !== 0}" @touchmove="turn" @touchend="clearX" @mouseover="isPaused = true" @mouseout="isPaused = false">
+      <div class="content-carrousel" :class="{plane: enlargeItem !== 0}" @touchmove="turn" @touchend="clearX">
         <figure v-for="(item, ind) in tableData" class="shadow" @click="enlarge(ind + 1)" :style="{transform: 'rotateY(' + (rotation + config.angle * ind) + 'deg) translateZ(' + config.translateZ +'px)'}" :class="{enlarge: enlargeItem === ind + 1}" :key="ind">
-          <Excl v-if="tableData" :data="item"></Excl>
+          <div class="la" @mouseover="isPaused = true" @mouseout="isPaused = false">
+            <Excl v-if="tableData" :data="item"></Excl>
+          </div>
         </figure>
       </div>
       <div class="file-panel">
@@ -32,22 +34,7 @@ export default {
         angle: 30,
         translateZ: 650,
         speed: 1,
-        requestList: [
-          '泰州能效对标日对标(1日).xls',
-          '泰州能效对标日对标(2日).xls',
-          '泰州能效对标日对标(3日).xls',
-          '泰州能效对标日对标(4日).xls',
-          '国电泰州机组对标月报表(1月).xlsx',
-          '国电泰州机组对标月报表(2月).xlsx',
-          '国电泰州机组对标月报表(3月).xlsx',
-          '国电泰州机组对标月报表(4月).xlsx',
-          '国电泰州#3至#4机组对比报表(1月).xlsx',
-          '国电泰州#3至#4机组对比报表(2月).xlsx',
-          '国电泰州#3至#4机组对比报表(3月).xlsx',
-          '国电泰州#3至#4机组对比报表(4月).xlsx',
-          '国电泰州机组对标环比月报表.xlsx',
-          '国电泰州机组对标同比月报表.xlsx'
-        ]
+        requestList: ["泰州能效对标日对标(1日).xls","泰州能效对标日对标(2日).xls","泰州能效对标日对标(3日).xls","泰州能效对标日对标(4日).xls","国电泰州机组对标月报表(1月).xlsx","国电泰州机组对标月报表(2月).xlsx","国电泰州机组对标月报表(3月).xlsx","国电泰州机组对标月报表(4月).xlsx","国电泰州#3至#4机组对比报表(1月).xlsx","国电泰州#3至#4机组对比报表(2月).xlsx","国电泰州#3至#4机组对比报表(3月).xlsx","国电泰州#3至#4机组对比报表(4月).xlsx","国电泰州机组对标环比月报表.xlsx","国电泰州机组对标同比月报表.xlsx"]
       },
       tableData: null
     }
@@ -127,7 +114,7 @@ export default {
     },
     refash () {
       // http://172.103.1.221:8081/excel/public/index.php?s=index/index/
-      fetch('http://172.103.1.221:8081/excel/public/index.php?s=index/index/filedir').then((res) => {
+      fetch('http://172.103.1.221:8081/index/index/filedir').then((res) => {
         if (res.ok) { // 请求成功执行回掉
           res.json().then((data) => {
             console.log(data)
@@ -154,7 +141,7 @@ export default {
       cache: 'default',
       body: JSON.stringify(sendData)
     }
-    fetch('http://openvticn.com/excel/public/index.php?s=index/index/select_data', fetchConfig).then((res) => {
+    fetch('http://172.103.1.221:8081/index/index/select_data', fetchConfig).then((res) => {
       if (res.ok) { // 请求成功执行回掉
         res.json().then((data) => {
           // data.data = JSON.parse(data.data)
@@ -194,7 +181,7 @@ export default {
     height: 350px;
     width: 100%;
     height: 100%;
-    background-color: #35373e;
+    background-color: #34425f;
     box-sizing: border-box;
   }
 
@@ -270,8 +257,7 @@ export default {
     transform: none;
   }
   .content-carrousel figure {
-    transform: scale(2,2);
-    width: 540px;
+    width: 550px;
     height: 380px;
     z-index: 1;
     overflow: hidden;

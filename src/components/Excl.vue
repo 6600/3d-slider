@@ -195,8 +195,8 @@ export default {
     height: 100%;
   }
   table tr td {
-    border-right: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
+    border-right: 1px solid #dbdbdb;
+    border-bottom: 1px solid #dbdbdb;
   }
   table tr:nth-child(1) {
     display: none;
@@ -207,15 +207,15 @@ export default {
   table tr:nth-child(2) {
     height: 30px;
     font-weight: bold;
-    background-color: #212121;
-    color: #64a9b4;
+    background-color: #263b59;
+    color: white;
     font-size: 14px;
   }
   table tr:nth-child(3) td {
     color: white;
     padding: 0 5px;
     text-align: left;
-    background-color: #212121;
+    background-color: #263b59;
   }
   table td {
     text-align: center;
