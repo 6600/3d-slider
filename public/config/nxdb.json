@@ -1,0 +1,10 @@
+{
+    "dataurl": "http://openvticn.com/excel/public/index.php?s=index/index/select_data",
+    "refashUrl": "http://172.103.1.221:8081/index/index/filedir",
+    "angle": 30,
+    "translateZ": 670,
+    "requestList": ["泰州能效对标日对标(1日).xls","泰州能效对标日对标(2日).xls","泰州能效对标日对标(3日).xls","泰州能效对标日对标(4日).xls","国电泰州机组对标月报表(1月).xlsx","国电泰州机组对标月报表(2月).xlsx","国电泰州机组对标月报表(3月).xlsx","国电泰州机组对标月报表(4月).xlsx","国电泰州#3至#4机组对比报表(1月).xlsx","国电泰州#3至#4机组对比报表(2月).xlsx","国电泰州#3至#4机组对比报表(3月).xlsx","国电泰州#3至#4机组对比报表(4月).xlsx","国电泰州机组对标环比月报表.xlsx","国电泰州机组对标同比月报表.xlsx"],
+    "speed": 1,
+    "width": "500px",
+    "height": "360px"
+}

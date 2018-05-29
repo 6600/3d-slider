@@ -184,7 +184,9 @@ export default {
     cursor: pointer;
     border: 1px solid #3b444b;
     background-color: #f8f8f8;
-    transform: scale(0.6, 0.6);
+    /* transform: scale(0.6, 0.6); */
+    /* 数据归类统计 */
+    transform: scale(0.7, 0.7);
     box-shadow: 0px 0px 20px 0px #000;
     border-radius: 1px;
   }

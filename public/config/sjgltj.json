@@ -1,0 +1,10 @@
+{
+    "dataurl": "http://openvticn.com/excel/public/index.php?s=index/index/select_data",
+    "refashUrl": "http://172.103.1.221:8081/index/index/filedir",
+    "angle": 72,
+    "translateZ": 560,
+    "requestList": ["保护归类统计.csv", "超限归类统计.csv", "启停归类统计.csv", "自动归类统计.csv", "自动归类统计2.csv"],
+    "speed": 1,
+    "width": "960px",
+    "height": "540px"
+}

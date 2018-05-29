@@ -1,8 +1,8 @@
 <template>
   <section id="slideshow">
-    <div class="entire-content">
+    <div v-if="config" class="entire-content">
       <div class="content-carrousel" :class="{plane: enlargeItem !== 0}" @touchmove="turn" @touchend="clearX">
-        <figure v-for="(item, ind) in tableData" class="shadow" @click="enlarge(ind + 1)" :style="{transform: 'rotateY(' + (rotation + config.angle * ind) + 'deg) translateZ(' + config.translateZ +'px)'}" :class="{enlarge: enlargeItem === ind + 1}" :key="ind">
+        <figure v-for="(item, ind) in tableData" class="shadow" @click="enlarge(ind + 1)" :style="{transform: 'rotateY(' + (rotation + config.angle * ind) + 'deg) translateZ(' + config.translateZ +'px)', width: config.width, height: config.height}" :class="{enlarge: enlargeItem === ind + 1}" :key="ind">
           <div class="la" @mouseover="isPaused = true" @mouseout="isPaused = false">
             <Excl v-if="tableData" :data="item"></Excl>
           </div>
@@ -30,12 +30,7 @@ export default {
       clock: null,
       isPaused: false,
       enlargeItem: 0,
-      config: {
-        angle: 30,
-        translateZ: 650,
-        speed: 1,
-        requestList: ["泰州能效对标日对标(1日).xls","泰州能效对标日对标(2日).xls","泰州能效对标日对标(3日).xls","泰州能效对标日对标(4日).xls","国电泰州机组对标月报表(1月).xlsx","国电泰州机组对标月报表(2月).xlsx","国电泰州机组对标月报表(3月).xlsx","国电泰州机组对标月报表(4月).xlsx","国电泰州#3至#4机组对比报表(1月).xlsx","国电泰州#3至#4机组对比报表(2月).xlsx","国电泰州#3至#4机组对比报表(3月).xlsx","国电泰州#3至#4机组对比报表(4月).xlsx","国电泰州机组对标环比月报表.xlsx","国电泰州机组对标同比月报表.xlsx"]
-      },
+      config: null,
       tableData: null
     }
   },
@@ -114,7 +109,7 @@ export default {
     },
     refash () {
       // http://172.103.1.221:8081/excel/public/index.php?s=index/index/
-      fetch('http://172.103.1.221:8081/index/index/filedir').then((res) => {
+      fetch(this.config.refashUrl).then((res) => {
         if (res.ok) { // 请求成功执行回掉
           res.json().then((data) => {
             console.log(data)
@@ -124,38 +119,54 @@ export default {
         alert('刷新失败!')
         console.error('[POST]请求失败！', e)
       })
+    },
+    getQueryString (name) {
+      var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+      var r = window.location.search.substr(1).match(reg);
+      if(r!=null)return  unescape(r[2]); return null;
     }
   },
   created () {
-    const sendData = {
-      type: 'name',
-      data: this.config.requestList.toString()
-    }
-    // 发起post请求
-    const fetchConfig = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-      },
-      credentials: 'credentials',
-      cache: 'default',
-      body: JSON.stringify(sendData)
-    }
-    fetch('http://172.103.1.221:8081/index/index/select_data', fetchConfig).then((res) => {
-      if (res.ok) { // 请求成功执行回掉
-        res.json().then((data) => {
-          // data.data = JSON.parse(data.data)
-          this.tableData = this.deepClone(data)
+    // 获取配置文件
+    fetch('./config/' + this.getQueryString('config') + '.json').then((resData) => {
+      if (resData.ok) { // 请求成功执行回掉
+        resData.json().then((configData) => {
+          // 从配置的接口请求数据
+          this.config = configData
+          const sendData = {
+            type: 'name',
+            data: this.config.requestList.toString()
+          }
+          // 发起post请求
+          const fetchConfig = {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            },
+            credentials: 'credentials',
+            cache: 'default',
+            body: JSON.stringify(sendData)
+          }
+          fetch(configData.dataurl, fetchConfig).then((res) => {
+            if (res.ok) { // 请求成功执行回掉
+              res.json().then((data) => {
+                // data.data = JSON.parse(data.data)
+                this.tableData = this.deepClone(data)
+                setTimeout(() => {
+                  // 自动旋转
+                  this.animate()
+                }, 0);
+              })
+            }
+          }, (e) => {
+            alert('从服务器获取数据失败!')
+            console.error('[POST]请求失败！', e)
+          })
         })
       }
     }, (e) => {
-      alert('从服务器获取数据失败!')
-      console.error('[POST]请求失败！', e)
+      alert('获取配置文件失败!')
     })
-  },
-  mounted () {
-    // 自动旋转
-    this.animate()
   }
 }
 </script>
@@ -233,8 +244,8 @@ export default {
 
   .entire-content .content-carrousel .enlarge {
     position: fixed;
-    width: 100%;
-    height: 100%;
+    width: 100% !important;
+    height: 100% !important;
     transform: none;
     z-index: 99;
   }
@@ -257,8 +268,6 @@ export default {
     transform: none;
   }
   .content-carrousel figure {
-    width: 550px;
-    height: 380px;
     z-index: 1;
     overflow: hidden;
     position: absolute;
