@@ -11,7 +11,7 @@
       <div class="file-panel">
         <div class="file-name" v-for="(item, ind) in tableData" @click="enlarge(ind + 1)" :key="item.id">{{item.name}}</div>
       </div>
-      <div class="close" v-show="enlargeItem !== 0" @click="enlargeItem = 0">x</div>
+      <div class="close" v-show="enlargeItem !== 0" @click="enlargeItem = 0"></div>
       <div class="update" @click="refash">
         <svg t="1525943602085" class="icon" style="" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4708" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24"><defs></defs><path d="M962.074 490.554L647.271 355.638l125.831-89.881c-65.56-69.108-157.968-112.493-260.747-112.493-174.244 0-319.503 123.884-352.634 288.369l-83.949-34.777C123.56 209.825 300.628 63.32 512.355 63.32c132.973 0 252.063 58.09 334.393 149.833l115.326-82.375v359.776z m-710.47 269.773c65.556 69.108 157.973 112.488 260.752 112.488 174.918 0 320.546-124.873 352.931-290.307l83.868 35.874c-47.481 197.458-224.77 344.377-436.799 344.377-132.973 0-252.068-58.086-334.398-149.828l-115.322 82.37V535.525L377.44 670.441l-125.836 89.886z" p-id="4709"></path></svg>
       </div>
@@ -154,7 +154,7 @@ export default {
                 this.tableData = this.deepClone(data)
                 setTimeout(() => {
                   // 自动旋转
-                  // this.animate()
+                  this.animate()
                 }, 0);
               })
             }
@@ -192,12 +192,10 @@ export default {
     height: 350px;
     width: 100%;
     height: 100%;
-    background-image: url(./assets/back.svg);
+    background-image: url(./assets/bg.jpg);
     box-sizing: border-box;
-    background-size: 96px;
-    background-color: #131838;
+    background-position: -1px -1px;
   }
-
   .slideshow-title {
     font-family: 'Allerta Stencil';
     font-size: 62px;
@@ -241,6 +239,7 @@ export default {
     transform-style: unset;
   }
   .plane figure {
+    overflow: hidden;
     transform: none !important;
   }
 
@@ -252,8 +251,9 @@ export default {
     z-index: 99;
     background-image: url(./assets/back.svg);
     box-sizing: border-box;
-    background-size: 96px;
+    background-size: 50px;
     background-color: #131838;
+    background-color: linear-gradient(#002852, #0c1625);
   }
   .content-carrousel .enlarge .title {
     height: 40px;
@@ -280,6 +280,7 @@ export default {
   }
   .content-carrousel .enlarge .show {
     transform: none;
+    background-size: cover;
   }
   .content-carrousel .enlarge table tr:nth-child(2) td {
     font-size: 28px;
@@ -306,30 +307,35 @@ export default {
   }
   .close {
     position: fixed;
-    right: 0;
-    top: 0;
+    right: 50px;
+    top: 40px;
     z-index: 100;
-    height: 29px;
-    width: 29px;
+    height: 50px;
+    width: 50px;
     cursor: pointer;
-    background-color: burlywood;
+    background-image: url(./assets/close.svg);
     text-align: center;
     line-height: 29px;
     font-size: 2rem;
+    background-size: 50px 50px;
+    background-repeat: no-repeat;
   }
   .file-panel {
     position: fixed;
     top: 5px;
     right: 5px;
-    background-color: #454c5a;
-    opacity: 0.8;
   }
   .file-panel .file-name {
     color: white;
     padding: 0 5px;
-    height: 25px;
+    height: 30px;
+    width: 300px;
+    overflow: hidden;
     cursor: pointer;
-    line-height: 25px;
+    line-height: 30px;
+    text-align: center;
+    background-repeat: no-repeat;
+    background-image: url(./assets/rightTable.svg);
   }
   .file-panel .file-name:hover {
     color: black;

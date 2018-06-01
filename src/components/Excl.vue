@@ -1,11 +1,16 @@
 <template>
   <div class="show shadow">
-    <table v-if="tableData" border="0">
-      <tr v-for="(item, ind) in tableData" :key="ind">
-        <td v-for="(data, index) in item" :key="index" :rowspan="data.rowspan" :colspan="data.colspan">{{data.value === 'NULL' ? '' : fixed(data.value)}}</td>
-      </tr>
-    </table>
-    <div class="back-panel"></div>
+    <div class="table-box">
+      <table v-if="tableData" border="0">
+        <tr v-for="(item, ind) in tableData" :key="ind">
+          <td v-for="(data, index) in item" :key="index" :rowspan="data.rowspan" :colspan="data.colspan">{{data.value === 'NULL' ? '' : fixed(data.value)}}</td>
+        </tr>
+      </table>
+    </div>
+    <div class="left-top border"></div>
+    <div class="left-bottom border"></div>
+    <div class="right-top border"></div>
+    <div class="right-bottom border"></div>
   </div>
 </template>
 
@@ -181,23 +186,50 @@ export default {
   .show {
     height: 100%;
     width: 100%;
-    overflow: hidden;
     cursor: pointer;
     transform: scale(0.6, 0.6);
     /* 数据归类统计 */
     /* transform: scale(0.7, 0.7); */
     background-repeat: no-repeat;
-    background-image: url(../assets/border.svg);
     border-radius: 1px;
   }
-  .back-panel {
-    background-color: #162244;
+  .border {
     position: absolute;
-    width: 798px;
-    height: 395px;
-    top: 56px;
-    left: 16px;
-    z-index: -1;
+    background-repeat: no-repeat;
+    background-size: 320px;
+  }
+  .table-box {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+  .left-top {
+    width: 320px;
+    height: 143px;
+    left: -20px;
+    top: -20px;
+    background-image: url(../assets/left-top.svg);
+  }
+  .right-top {
+    width: 320px;
+    height: 143px;
+    right: -20px;
+    top: -20px;
+    background-image: url(../assets/right-top.svg);
+  }
+  .right-bottom {
+    width: 320px;
+    height: 143px;
+    right: -20px;
+    bottom: -20px;
+    background-image: url(../assets/right-bottom.svg);
+  }
+  .left-bottom {
+    width: 320px;
+    height: 143px;
+    left: -20px;
+    bottom: -20px;
+    background-image: url(../assets/left-bottom.svg);
   }
   table {
     color: white;
@@ -205,11 +237,10 @@ export default {
     width: calc(100% - 20px);
     font-size: 12px;
     border-spacing: 0px;
-    margin: 10px;
-    margin-top: -3px;
     height: calc(100% - 15px);
   }
   table tr {
+    background-size: cover;
     background-repeat: no-repeat;
     background-position-y: center;
     background-image: url(../assets/table.svg);
