@@ -154,7 +154,7 @@ export default {
                 this.tableData = this.deepClone(data)
                 setTimeout(() => {
                   // 自动旋转
-                  this.animate()
+                  // this.animate()
                 }, 0);
               })
             }
@@ -192,8 +192,10 @@ export default {
     height: 350px;
     width: 100%;
     height: 100%;
-    background-color: #34425f;
+    background-image: url(./assets/back.svg);
     box-sizing: border-box;
+    background-size: 96px;
+    background-color: #131838;
   }
 
   .slideshow-title {
@@ -248,6 +250,10 @@ export default {
     height: 100% !important;
     transform: none;
     z-index: 99;
+    background-image: url(./assets/back.svg);
+    box-sizing: border-box;
+    background-size: 96px;
+    background-color: #131838;
   }
   .content-carrousel .enlarge .title {
     height: 40px;
@@ -255,6 +261,11 @@ export default {
   }
   .content-carrousel .enlarge table {
     height: unset;
+    margin-top: 9px;
+    font-size: 16px;
+  }
+  .content-carrousel .enlarge table tr {
+    height: 65px;
   }
   .content-carrousel .enlarge table tr:nth-child(2) {
     height: 40px;
@@ -262,10 +273,19 @@ export default {
   }
   .content-carrousel .enlarge td {
     height: 20px;
-    font-size: 14px;
+    font-size: 20px;
+  }
+  .content-carrousel .enlarge .back-panel {
+    display: none;
   }
   .content-carrousel .enlarge .show {
     transform: none;
+  }
+  .content-carrousel .enlarge table tr:nth-child(2) td {
+    font-size: 28px;
+  }
+  .content-carrousel .enlarge table tr:nth-child(3) td {
+    font-size: 22px;
   }
   .content-carrousel figure {
     z-index: 1;

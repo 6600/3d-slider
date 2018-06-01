@@ -2,9 +2,10 @@
   <div class="show shadow">
     <table v-if="tableData" border="0">
       <tr v-for="(item, ind) in tableData" :key="ind">
-        <td v-for="(data, index) in item" v-if="data.value !== 'NULL'" :key="index" :rowspan="data.rowspan" :colspan="data.colspan">{{fixed(data.value)}}</td>
+        <td v-for="(data, index) in item" :key="index" :rowspan="data.rowspan" :colspan="data.colspan">{{data.value === 'NULL' ? '' : fixed(data.value)}}</td>
       </tr>
     </table>
+    <div class="back-panel"></div>
   </div>
 </template>
 
@@ -182,42 +183,59 @@ export default {
     width: 100%;
     overflow: hidden;
     cursor: pointer;
-    border: 1px solid #3b444b;
-    background-color: #f8f8f8;
-    /* transform: scale(0.6, 0.6); */
+    transform: scale(0.6, 0.6);
     /* 数据归类统计 */
-    transform: scale(0.7, 0.7);
-    box-shadow: 0px 0px 20px 0px #000;
+    /* transform: scale(0.7, 0.7); */
+    background-repeat: no-repeat;
+    background-image: url(../assets/border.svg);
     border-radius: 1px;
   }
+  .back-panel {
+    background-color: #162244;
+    position: absolute;
+    width: 798px;
+    height: 395px;
+    top: 56px;
+    left: 16px;
+    z-index: -1;
+  }
   table {
-    width: 100%;
+    color: white;
+    font-weight: 100;
+    width: calc(100% - 20px);
     font-size: 12px;
     border-spacing: 0px;
-    height: 100%;
+    margin: 10px;
+    margin-top: -3px;
+    height: calc(100% - 15px);
   }
-  table tr td {
-    border-right: 1px solid #dbdbdb;
-    border-bottom: 1px solid #dbdbdb;
+  table tr {
+    background-repeat: no-repeat;
+    background-position-y: center;
+    background-image: url(../assets/table.svg);
   }
   table tr:nth-child(1) {
     display: none;
+    background-image: none;
   }
   table tr:nth-child(2) td {
     border-bottom: none;
   }
   table tr:nth-child(2) {
     height: 30px;
-    font-weight: bold;
-    background-color: #263b59;
     color: white;
     font-size: 14px;
+    background-image: none;
+  }
+  table tr:nth-child(3) {
+    font-size: 12px;
+    background-image: none;
   }
   table tr:nth-child(3) td {
     color: white;
     padding: 0 5px;
     text-align: left;
-    background-color: #263b59;
+    font-size: 12px;
   }
   table td {
     text-align: center;
