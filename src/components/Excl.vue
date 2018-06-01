@@ -204,17 +204,17 @@ export default {
     overflow: hidden;
   }
   .left-top {
-    width: 320px;
-    height: 143px;
+    width: 30%;
+    height: 20%;
     left: -20px;
-    top: -20px;
+    top: 0px;
     background-image: url(../assets/left-top.svg);
   }
   .right-top {
-    width: 320px;
-    height: 143px;
+    width: 30%;
+    height: 20%;
     right: -20px;
-    top: -20px;
+    top: 0px;
     background-image: url(../assets/right-top.svg);
   }
   .right-bottom {

@@ -281,6 +281,15 @@ export default {
   .content-carrousel .enlarge .show {
     transform: none;
     background-size: cover;
+    background-image: url(./assets/border.svg);
+  }
+  .content-carrousel .enlarge .table-box {
+    margin: 20px;
+    width: calc(100% - 40px);
+    height: calc(100% - 60px);
+  }
+  .content-carrousel .enlarge .border {
+    display: none;
   }
   .content-carrousel .enlarge table tr:nth-child(2) td {
     font-size: 28px;
